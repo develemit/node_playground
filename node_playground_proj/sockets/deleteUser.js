@@ -1,6 +1,6 @@
 const knex = require('../db/knex');
 
-const deleteUser = async socket => {
+const deleteUser = async (socket, io) => {
   try {
     socket.on('deleteUser', async id => {
       console.log('heard deleteUser request', id);
@@ -9,7 +9,7 @@ const deleteUser = async socket => {
         .where('id', id);
       console.log(`user with id ${id} deleted`);
       const users = await knex('users').select();
-      socket.emit('usersSocket', users);
+      io.emit('usersSocket', users);
     });
   } catch (error) {
     console.error(`Error: ${error}`);

@@ -10,6 +10,7 @@ const socketIo = require('socket.io');
 const usersSocket = require('./sockets/userSocket');
 const postNewUser = require('./sockets/postNewUser');
 const getUser = require('./sockets/getUser');
+const editUser = require('./sockets/editUser');
 const deleteUser = require('./sockets/deleteUser');
 
 const index = require('./routes/indexRoutes');
@@ -44,13 +45,14 @@ io.on('connection', socket => {
   console.log('New Client Connected!');
   let interval;
   socket.on('usersSocket', () => {
-    usersSocket(socket);
+    usersSocket(socket, io);
   });
 
   // ** Things to Listen for ** //
-  getUser(socket);
-  postNewUser(socket);
-  deleteUser(socket);
+  getUser(socket, io);
+  postNewUser(socket, io);
+  editUser(socket, io);
+  deleteUser(socket, io);
 
   socket.on('disconnect', () => {
     console.log('client disconnected!');

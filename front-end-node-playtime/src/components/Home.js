@@ -3,17 +3,43 @@ import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
 import userSocketConnect, {
   postNewUser,
-  deleteUser
+  deleteUser,
+  editUser
 } from '../sockets/userSocketConnect';
 
 export const Home = ({ users, setUsers }) => {
   userSocketConnect(setUsers);
   const [tenetive, setTenetive] = useState('');
-  const renderUsers = users.map(({ first_name, id }) => (
-    <li key={first_name}>
-      First Name: {first_name} <button onClick={() => deleteUser(id)}>X</button>
-    </li>
-  ));
+  const [editValue, setEditValue] = useState('');
+
+  const [edit, setEdit] = useState({ id: null });
+
+  const renderUsers = users
+    .sort(({ id: a }, { id: b }) => a - b)
+    .map(({ first_name, id }) => (
+      <li
+        key={first_name}
+        onClick={() => {
+          setEdit({ id });
+          setEditValue(first_name);
+        }}
+      >
+        {edit.id === id ? (
+          <input
+            autoFocus
+            value={editValue}
+            onChange={({ target: { value } }) => setEditValue(value)}
+            onBlur={() => {
+              setEdit({ id: null });
+              if (editValue !== first_name) editUser(id, editValue);
+            }}
+          />
+        ) : (
+          <span>{first_name}</span>
+        )}{' '}
+        <button onClick={() => deleteUser(id)}>X</button>
+      </li>
+    ));
   return (
     <div className="App">
       <header className="App-header">

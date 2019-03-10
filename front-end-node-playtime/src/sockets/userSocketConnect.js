@@ -6,8 +6,14 @@ const socket = socketIOClient(baseURL, {
   rejectUnauthorized: false
 });
 
+function useEffectAsync(effect, inputs) {
+  useEffect(() => {
+    effect();
+  }, inputs);
+}
+
 export const userSocketConnect = setUsers =>
-  useEffect(async () => {
+  useEffectAsync(async () => {
     socket.on('usersSocket', users => {
       console.log('got the users!', users);
       setUsers(users);
@@ -31,11 +37,12 @@ export const reqUser = async user => {
 };
 
 export const getUser = setUser => {
-  useEffect(async () => {
+  useEffectAsync(async () => {
     socket.on('getUser', user => {
       console.log('heard getUser on Client!', user);
       setUser(user);
     });
+    return () => socket.disconnect();
   }, []);
 };
 
@@ -46,6 +53,11 @@ export const postNewUser = user => {
 export const deleteUser = id => {
   console.log('recieved delete request!', id);
   socket.emit('deleteUser', id);
+};
+
+export const editUser = (id, newValue) => {
+  console.log('recieved delete request!', id);
+  socket.emit('editUser', { id, newValue });
 };
 
 export default userSocketConnect;
