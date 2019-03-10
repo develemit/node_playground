@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../logo.svg';
-import userSocketConnect, { postNewUser } from '../sockets/userSocketConnect';
+import userSocketConnect, {
+  postNewUser,
+  deleteUser
+} from '../sockets/userSocketConnect';
 
 export const Home = ({ users, setUsers }) => {
   userSocketConnect(setUsers);
   const [tenetive, setTenetive] = useState('');
-  const renderUsers = users.map(({ first_name }) => (
-    <li key={first_name}>First Name: {first_name}</li>
+  const renderUsers = users.map(({ first_name, id }) => (
+    <li key={first_name}>
+      First Name: {first_name} <button onClick={() => deleteUser(id)}>X</button>
+    </li>
   ));
   return (
     <div className="App">

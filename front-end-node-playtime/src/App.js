@@ -8,6 +8,7 @@ import './App.css';
 
 const App = () => {
   const [users, setUsers] = useState([]);
+  console.log('fired users', users)
   return (
     <BrowserRouter>
       <div className="App">

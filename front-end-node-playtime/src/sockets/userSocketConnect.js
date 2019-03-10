@@ -8,12 +8,12 @@ const socket = socketIOClient(baseURL, {
 
 export const userSocketConnect = setUsers =>
   useEffect(async () => {
-    socket.emit('usersSocket', users => {
-      console.log('getting Initial Users!', users);
-      setUsers(users);
-    });
     socket.on('usersSocket', users => {
       console.log('got the users!', users);
+      setUsers(users);
+    });
+    socket.emit('usersSocket', users => {
+      console.log('getting Initial Users!', users);
       setUsers(users);
     });
     socket.on('connect_error', err => {
@@ -41,6 +41,11 @@ export const getUser = setUser => {
 
 export const postNewUser = user => {
   socket.emit('postNewUser', user);
+};
+
+export const deleteUser = id => {
+  console.log('recieved delete request!', id);
+  socket.emit('deleteUser', id);
 };
 
 export default userSocketConnect;
