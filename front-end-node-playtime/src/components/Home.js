@@ -4,13 +4,17 @@ import logo from '../logo.svg';
 import userSocketConnect, {
   postNewUser,
   deleteUser,
-  editUser
+  editUser,
+  connectedUsers
 } from '../sockets/userSocketConnect';
 
-export const Home = ({ users, setUsers }) => {
+export const Home = ({ users, setUsers, setCount }) => {
   userSocketConnect(setUsers);
   const [tenetive, setTenetive] = useState('');
   const [editValue, setEditValue] = useState('');
+
+  // * Counts the connected users * //
+  connectedUsers(setCount);
 
   const [edit, setEdit] = useState({ id: null });
 
@@ -45,7 +49,6 @@ export const Home = ({ users, setUsers }) => {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>Hello Emit</p>
-
         <span>Need to add a user?</span>
         <br />
         <input

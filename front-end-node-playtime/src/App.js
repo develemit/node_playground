@@ -1,23 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import Home from './components/Home';
-import { User } from './components/User';
+import { Home, User } from './components';
 import './App.css';
 
-// ** yey! ** // 
+// ** yey! ** //
 
 const App = () => {
   const [users, setUsers] = useState([]);
-  console.log('fired users', users)
+  const [count, setCount] = useState(0);
   return (
     <BrowserRouter>
       <div className="App">
+        <p style={{ color: 'white', position: 'absolute' }}>
+          There are {count} users on this site!
+        </p>
         <Switch>
           <Route
             exact
             path="/"
             render={routeProps => (
-              <Home {...routeProps} users={users} setUsers={setUsers} />
+              <Home
+                {...routeProps}
+                users={users}
+                setUsers={setUsers}
+                setCount={setCount}
+              />
             )}
           />
           <Route exactpath="/user" component={User} />

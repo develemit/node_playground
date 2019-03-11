@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { reqUser, getUser } from '../sockets/userSocketConnect';
 
-export const User = () => {
+const User = () => {
   const [{ first_name, last_name }, setUser] = useState({});
   const [input, setInput] = useState('');
 
@@ -32,3 +32,5 @@ export const User = () => {
     </div>
   );
 };
+
+export default User;

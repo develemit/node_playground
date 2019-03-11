@@ -12,6 +12,16 @@ function useEffectAsync(effect, inputs) {
   }, inputs);
 }
 
+export const connectedUsers = setCount => {
+  useEffectAsync(async () => {
+    await socket.on('connectedUsers', count => {
+      console.log('recieved countUser request!', count);
+      setCount(count);
+    });
+    return () => socket.disconnect();
+  }, []);
+};
+
 export const userSocketConnect = setUsers =>
   useEffectAsync(async () => {
     socket.on('usersSocket', users => {

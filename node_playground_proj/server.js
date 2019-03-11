@@ -12,6 +12,7 @@ const postNewUser = require('./sockets/postNewUser');
 const getUser = require('./sockets/getUser');
 const editUser = require('./sockets/editUser');
 const deleteUser = require('./sockets/deleteUser');
+const connectedUsers = require('./sockets/connectedUsers');
 
 const index = require('./routes/indexRoutes');
 const todos = require('./routes/todosRoutes');
@@ -31,6 +32,7 @@ app.use('/todos', todos);
 
 const server = http.createServer(app);
 const io = socketIo(server);
+let connectedCounter = 0;
 
 // const usersSocket = async socket => {
 //   try {
@@ -42,10 +44,11 @@ const io = socketIo(server);
 // };
 
 io.on('connection', socket => {
-  console.log('New Client Connected!');
-  let interval;
+  connectedCounter++;
+  console.log('New Client Connected!', 'Clients connected', connectedCounter);
   socket.on('usersSocket', () => {
     usersSocket(socket, io);
+    connectedUsers(socket, io, connectedCounter);
   });
 
   // ** Things to Listen for ** //
@@ -55,8 +58,9 @@ io.on('connection', socket => {
   deleteUser(socket, io);
 
   socket.on('disconnect', () => {
+    connectedCounter--;
+    connectedUsers(socket, io, connectedCounter);
     console.log('client disconnected!');
-    if (interval) clearInterval(interval);
   });
 });
 
